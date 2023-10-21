@@ -1,15 +1,16 @@
 import csv
+import pickle
 
-f1=open("mark.txt","r")
-f2=open("marklist.csv","w",newline="")
-w=csv.writer(f2)
+command=0
+f_1=open("data.dat","ab")
+f_1.close()
 
 c=0
 cur_line=0
 
 mark=[" "," "," "]
 sub_codes={}
-head=["roll no","sex","name"]
+head=["roll no","gender","name"]
 
 def details_thingy(a):
     l=[]
@@ -32,7 +33,6 @@ def details_thingy(a):
     l[2],l[3]=l[3],l[2]
     return l
 
-
 def enter_mark(roll,gender,name,sub_code_only,mark_only,grade_only,grade1,grade2,grade3,status):
     student_mark=mark.copy()
     student_mark[0]=roll
@@ -51,25 +51,148 @@ def enter_mark(roll,gender,name,sub_code_only,mark_only,grade_only,grade1,grade2
       
     w.writerow(student_mark)
 
-no_sub=int(input("Enter no of subjects: "))
+def set_new():
+    no_sub=int(input("Enter no of subjects: "))
+    
+    for i in range(no_sub):   
+        sub=input("Enter subject name: ")
+        code=int(input("Enter subject code: "))
+        sub_codes[sub]=code
 
-for i in range(no_sub):   
-    sub=input("Enter subject name: ")
-    code=int(input("Enter subject code: "))
-    head.append(sub)
-    head.append(f"{sub} grade")
+    f_1=open("data.dat","wb")
+    pickle.dump(sub_codes,f_1)
+    f_1.close()
+
+def view():
+    f_1=open("data.dat","rb")
+    sub_codes=pickle.load(f_1)
+    f_1.close()
+
+    print("Subject\t\tCode")
+    for i in sub_codes:
+        print(f"{i}\t\t{sub_codes[i]}")
+
+def delete():
+    delete=False
+    f_1=open("data.dat","rb")
+    sub_codes=pickle.load(f_1)
+    f_1.close()
+
+    del_code=int(input("Enter the code to delete: "))
+    
+    for i in sub_codes:
+        if sub_codes[i]==del_code:
+            new={}
+            for j in sub_codes:
+                if sub_codes[j]==del_code:
+                    delete=True
+                else:
+                    new[j]=sub_codes[j]
+            f_1=open("data.dat","wb")
+            pickle.dump(new,f_1)
+            f_1.close()
+
+    if delete==False:
+        print("Code does not exist")
+
+def add():
+    f_1=open("data.dat","rb")
+    sub_codes=pickle.load(f_1)
+    f_1.close()
+
+    add_sub=input("Enter subject to add: ")
+    if add_sub in sub_codes:
+        print("Subject already exists")
+    else:
+        add_code=int(input("Enter subject code: "))
+        for i in sub_codes:
+            if sub_codes[i]==add_code:
+                print("Code already exists")
+                break
+        else:
+            sub_codes[add_sub]=add_code
+            f_1=open("data.dat","wb")
+            pickle.dump(sub_codes,f_1)
+            f_1.close()
+
+def update():
+    f_1=open("data.dat","rb")
+    sub_codes=pickle.load(f_1)
+    f_1.close()
+
+    sub=input("Enter subject name to update code: ")
+    
+    if sub in sub_codes:
+        code_update=int(input(f"Enter the new code for {sub}: "))
+        for i in sub_codes:
+            if sub_codes[i]==code_update:
+                print("Code already exists")
+                break
+        else:
+            sub_codes[sub]=code_update
+            f_1=open("data.dat","wb")
+            pickle.dump(sub_codes,f_1)
+            f_1.close()
+            print("Updated")
+    else:
+        print("Subject does not exist")
+
+def create_file():
+
+    global sub_codes
+    global head
+    global mark
+    
+    f_1=open("data.dat","rb")
+    sub_codes=pickle.load(f_1)
+    f_1.close()
+
+    for i in sub_codes:
+        head.append(i)
+        head.append(f"{i} grade")
+        mark.append(" ")
+        mark.append(" ")
+
+    head.append("grade 1")
+    head.append("grade 2")
+    head.append("grade 3")
+    head.append("status")
     mark.append(" ")
     mark.append(" ")
-    sub_codes[sub]=code
+    mark.append(" ")
+    mark.append(" ")
 
-head.append("grade 1")
-head.append("grade 2")
-head.append("grade 3")
-head.append("status")
-mark.append(" ")
-mark.append(" ")
-mark.append(" ")
-mark.append(" ")
+print("1. Start new")
+print("2. View")
+print("3. Update")
+print("4. Delete")
+print("5. Add")
+print("6. Create file")
+
+while command==0:
+    command=int(input("Enter command number: "))
+
+    if command==1:
+        set_new()
+    elif command==2:
+        view()
+    elif command==3:
+        update()
+    elif command==4:
+        delete()
+    elif command==5:
+        add()
+    elif command==6:
+        create_file()
+        break
+    else:
+        print("Enter valid command number")
+
+    command=0
+
+f1=open("mark.txt","r")
+f2=open("marklist.csv","w",newline="")
+w=csv.writer(f2)
     
 lines=f1.readlines()
 w.writerow(head)
@@ -104,7 +227,6 @@ for i in lines:
 
         enter_mark(m[0],m[1],m[2],sub_code_only,mark_only,grade_only,grade1,grade2,grade3,status)
 
-                                      
 print(f"Got mark of {c} students")
 print("File has been created")
 f1.close()
