@@ -61,6 +61,7 @@ def set_new():
 
     f_1=open("data.dat","wb")
     pickle.dump(sub_codes,f_1)
+    print("Subject and subject code has been created")
     f_1.close()
 
 def view():
@@ -91,6 +92,7 @@ def delete():
             f_1=open("data.dat","wb")
             pickle.dump(new,f_1)
             f_1.close()
+            print(f"The code {del_code} has been deleted")
 
     if delete==False:
         print("Code does not exist")
@@ -114,6 +116,7 @@ def add():
             f_1=open("data.dat","wb")
             pickle.dump(sub_codes,f_1)
             f_1.close()
+            print(f"{add_sub} has been added with code {add_code}")
 
 def update():
     f_1=open("data.dat","rb")
@@ -133,7 +136,7 @@ def update():
             f_1=open("data.dat","wb")
             pickle.dump(sub_codes,f_1)
             f_1.close()
-            print("Updated")
+            print(f"Code of {sub} has been changed to {code_update}")
     else:
         print("Subject does not exist")
 
