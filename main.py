@@ -140,7 +140,7 @@ def update():
     else:
         print("Subject does not exist")
 
-def create_file():
+def set_all():
 
     global sub_codes
     global head
@@ -165,6 +165,13 @@ def create_file():
     mark.append(" ")
     mark.append(" ")
 
+print()
+print("N0TE THAT THE FILE WITH THE MARK IS NAMED AS 'mark' AND IS IN '.txt' format")
+print("NOTE THAT SUBJECT CODES LIKE 099 WILL BE TAKEN AS 99")
+print("NOTE THAT THE SUBJECT NAME IS CASE SENSITIVE")
+print("MAKE SURE THAT THE FILE 'convert_to_xlsx.csv' IS CONVERTED INTO 'marklist.xlsx'")
+print()
+
 print("1. Start new")
 print("2. View")
 print("3. Update")
@@ -186,7 +193,7 @@ while command==0:
     elif command==5:
         add()
     elif command==6:
-        create_file()
+        set_all()
         break
     else:
         print("Enter valid command number")
@@ -194,7 +201,7 @@ while command==0:
     command=0
 
 f1=open("mark.txt","r")
-f2=open("marklist.csv","w",newline="")
+f2=open("convert_to_xlsx.csv","w",newline="")
 w=csv.writer(f2)
     
 lines=f1.readlines()
@@ -230,7 +237,19 @@ for i in lines:
 
         enter_mark(m[0],m[1],m[2],sub_code_only,mark_only,grade_only,grade1,grade2,grade3,status)
 
+print()
+print("MAKE SURE THAT THE FILE 'convert_to_xlsx.csv' IS CONVERTED INTO 'marklist.xlsx' BEFORE RUNNING pie.py")
+print()
 print(f"Got mark of {c} students")
 print("File has been created")
+print()
+
 f1.close()
 f2.close()
+
+'''import pandas
+import os
+old=pandas.read_csv("marklist.csv")
+new=pandas.ExcelWriter("marklist.xlsx")
+old.to_excel(new,index=False)
+new.close()'''
