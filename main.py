@@ -7,7 +7,6 @@ f_1.close()
 
 c=0
 cur_line=0
-
 mark=[" "," "," "]
 sub_codes={}
 head=["roll no","gender","name"]
