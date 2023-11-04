@@ -8,15 +8,13 @@ a=''
 sub=False
 
 print()
-print("NOTE THAT THE SUBJECT NAME IS CASE SENSITIVE")
 print("NOTE THAT THE SUBJECT NAME IS ENTERED AS THE WAY ENTERED BEFORE")
 print()
 
 while not a.lower()=='stop':
-    a=input('Enter the name of subject to get the chart:')
+    a=input('Enter the name of subject to get the chart: ')
     for j in h:
         if j.value == a.lower():
-            print(j.column_letter)
             plt.figure(figsize=(6,5))
             eng=ws[f'{j.column_letter}']
             k=[]
@@ -41,7 +39,6 @@ while not a.lower()=='stop':
                     
             val=[acima90,acima80,acima60,abaixo60]
 
-            print(val)
             plt.pie(val,labels=l,autopct='%1.1f%%')
             plt.title(a)
             plt.show()
@@ -50,5 +47,4 @@ while not a.lower()=='stop':
     
     if sub==False:
         print("Enter valid subject")
-        print("NOTE THAT THE SUBJECT NAME IS CASE SENSITIVE")
         print("NOTE THAT THE SUBJECT NAME IS ENTERED AS THE WAY ENTERED BEFORE")
